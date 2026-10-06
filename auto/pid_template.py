@@ -44,7 +44,11 @@ def calculate_desired_acceleration(car: dict, K_P: float, K_I: float = 0.0, K_D:
         #input: car["v"], car["desired_v"] (floats)
         #output: desired acceleration and error tuple(float, float)
         error = car["desired_v"] - car["v"]
-        desired_accel = error * K_P
+        dt = car["dt"]
+        
+        car["net_integral"] += error * dt
+        
+        desired_accel = (error * K_P) + (car["net_integral"] * K_I)
         return desired_accel, error
 
 
