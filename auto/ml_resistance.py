@@ -15,7 +15,7 @@ from pid_template import (
 MASS, MAX_FORCE = 1000.0, 5000.0
 K_P, K_I, K_D = 7.0, 0.0075, 0.4
 DT, SPEED_SCALE = 0.1, 15.0 #SPEED_SCALE keeps feature magnitudes around one (since we only go up to 15 m/s)
-STEPS, EPOCHS = 400, 1000
+STEPS, EPOCHS = 400, 5000
 OUTPUT = Path(__file__).resolve().parent / "ml_results"
 
 
