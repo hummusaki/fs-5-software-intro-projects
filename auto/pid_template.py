@@ -34,6 +34,7 @@ def update(car: dict, throttle_perc: float, mass: float = 1000, max_throttle_for
         """
         force = throttle_perc * max_throttle_force
         
+        #friction stays in for callers but doesn't affect accel anymore
         
         #placeholder values used for resistance calculations:
         
