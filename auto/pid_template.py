@@ -33,7 +33,34 @@ def update(car: dict, throttle_perc: float, mass: float = 1000, max_throttle_for
         None, but updates the car's state variables
         """
         force = throttle_perc * max_throttle_force
-        car["a"] = (force / mass) - friction
+        
+        
+        #placeholder values used for resistance calculations:
+        
+        #rolling loss, 10% of the motor's max
+        #accel = 0.10 * (5000 N / 1000 kg) = 0.5 m/s^2
+        rolling_accel_loss = 0.5 #m/s^2
+        
+        #1 m/s^2 of aero loss at 10 m/s
+        #loss = coeff * speed ^ 2; so 1 / 10^2 = 0.01 1/m
+        #combines air density, drag coeff, frontal area, all divided by mass
+        drag_acceleration_coeff = 0.01 #1/m
+        
+        #areo accel loss grows with speed^2
+        #a_drag = (0.5 * air density * drag coeff * frontal area / mass) * speed^2
+        #combined factor in the parenthesis is the coeff
+        aerodynamic_accel_loss = (
+                drag_acceleration_coeff * car["v"] ** 2
+        )
+        
+        #add rolling and aero accel losses
+        #which equals (rolling force + drag force) / mass, in m/s^2
+        #and then is subtracted from motor accel for forward motion
+        total_resistance_accel_loss = (
+                rolling_accel_loss + aerodynamic_accel_loss
+        )
+        motor_accel = force / mass
+        car["a"] = motor_accel - total_resistance_accel_loss
         car["v"] += car["a"] * car["dt"]
         car["x"] += car["v"] * car["dt"]
         car["t"] += car["dt"]
